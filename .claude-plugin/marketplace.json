@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "rytass-decks",
+  "description": "Rytass 提案簡報工具：HTML 版型 + 協作留言",
+  "owner": {
+    "name": "nu.chang",
+    "email": "nu.chang@rytass.com"
+  },
+  "plugins": [
+    {
+      "name": "building-proposal-decks",
+      "description": "提案簡報 HTML 版型 + 協作留言（一般留言、回覆、resolve、Figma 式元件圖釘）。",
+      "author": {
+        "name": "nu.chang"
+      },
+      "category": "design",
+      "source": "./plugins/building-proposal-decks"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "building-proposal-decks",
+  "version": "1.0.0",
+  "description": "提案簡報 HTML 版型 + 協作留言（一般留言、回覆、resolve、Figma 式元件圖釘）。做提案簡報 / HTML 簡報 / 網頁視覺提案 / 套版型出簡報時使用。",
+  "author": {
+    "name": "nu.chang",
+    "email": "nu.chang@rytass.com"
+  }
+}
