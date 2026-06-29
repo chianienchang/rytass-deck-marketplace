@@ -4,10 +4,8 @@
 
 ## 同事安裝方式（在 Claude Code 裡）
 
-> 把下面的 `<GITHUB_USER>` 換成此 repo 的擁有者帳號（安裝說明發出前會填好）。
-
 ```
-/plugin marketplace add <GITHUB_USER>/rytass-deck-marketplace
+/plugin marketplace add chianienchang/rytass-deck-marketplace
 /plugin install building-proposal-decks@rytass-decks
 ```
 
