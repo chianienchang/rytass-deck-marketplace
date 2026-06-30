@@ -34,3 +34,15 @@
 - 改動的正本在維護者電腦的 `~/.claude/skills/building-proposal-decks/`。
 - 更新時須把改動**同步到本 repo 的 `plugins/building-proposal-decks/skills/building-proposal-decks/`**，並**確認 `template.html` 內 `EZC.endpoint` 仍是團隊共用留言網址**（不要被洗回 `PASTE_ENDPOINT_HERE`），再 `git push`。
 - 推上後通知同事依上方步驟更新。
+
+## 更新通知範本（給維護者複製轉發）
+
+```
+【提案簡報外掛更新通知】
+簡報外掛有更新，請在你的 Claude Code 更新：
+1. 輸入 /plugin
+2. Manage/管理 → 更新來源 rytass-decks
+3. 更新外掛 building-proposal-decks
+4. 完成即生效
+留言功能不用設定（後端已共用、網址內建）；要多人留言就把簡報上傳到能用網址開的地方再開「💬 註解模式」。
+```
