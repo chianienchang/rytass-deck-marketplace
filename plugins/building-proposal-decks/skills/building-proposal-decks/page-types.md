@@ -1,4 +1,4 @@
-# 頁型零件庫（新版 · 以 ezMoney deck 為準）
+# 頁型零件庫
 
 每一種頁型都是一個 `<div class="slide ...">`。從這裡複製對應區塊貼進 `template.html` 的 `slides-wrapper` 內。
 
@@ -245,6 +245,6 @@
 
 ---
 
-## 典型整份頁序（ezMoney 範式）
+## 典型整份頁序（範式）
 
 封面 → 目錄 → 章節分隔(Insight & Goals) → 產業洞察 → 改版目標 → 章節分隔(Design Directions) → 設計方向總覽 → 〔每款：風格章節頁 + 4 張展示頁〕×3 → 章節分隔(Summarize) → 總覽比較。

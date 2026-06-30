@@ -5,12 +5,12 @@
 <title>提案簡報</title>
 <style>
 :root {
-  /* Proposal design system (對齊 proposal v11 / overrides) */
-  --color-primary:       #D11F2A;
-  --color-primary-light: #E8616A;
-  --color-primary-bg:    #FBE7E9;
-  --color-accent:        #D11F2A;
-  --color-accent-light:  #FBE7E9;
+  /* 設計系統色票：換專案只改 --color-primary 一處，淺主色/淡底自動推導；其餘色固定 */
+  --color-primary:       #5D74E9;
+  --color-primary-light: color-mix(in srgb, var(--color-primary) 55%, white);
+  --color-primary-bg:    color-mix(in srgb, var(--color-primary) 12%, white);
+  --color-accent:        var(--color-primary);
+  --color-accent-light:  var(--color-primary-bg);
   --color-bg:            #FFFFFF;
   --color-bg-white:      #FFFFFF;
   --color-card:          #FFFFFF;
@@ -601,8 +601,8 @@ body:not(.scroll-mode) .slide.active {
   .scroll-hint { display: none !important; }
 }
 
-/* ════════ ezMoney additions ════════ */
-.s-a,.s-b,.s-c{--scheme:#D11F2A;}
+/* ════════ extended page-type styles ════════ */
+.s-a,.s-b,.s-c{--scheme:var(--color-primary);}
 
 /* live interactive iframe (desktop-width render, scaled to fit) */
 .live-vp{position:relative;overflow:hidden;background:#fff;flex:1;}
@@ -669,7 +669,7 @@ body:not(.scroll-mode) .slide.active {
 /* cover: full-bleed photo + bottom band + logo block */
 .slide.s-cover{background:#15171d url('material/cover-bg.jpg') center/cover no-repeat;color:#fff;padding:0;position:relative;justify-content:flex-end;align-items:stretch;}
 .cover-band{position:absolute;left:0;right:0;bottom:0;height:288px;display:flex;align-items:flex-end;}
-.cover-band-main{flex:1;min-width:0;height:288px;background:rgba(209,31,42,.93);padding:0 64px;display:flex;flex-direction:column;justify-content:center;}
+.cover-band-main{flex:1;min-width:0;height:288px;background:color-mix(in srgb, var(--color-primary) 93%, transparent);padding:0 64px;display:flex;flex-direction:column;justify-content:center;}
 .cover-band-main .ct{font-size:34px;font-weight:400;letter-spacing:2px;line-height:1.3;color:#fff;margin-bottom:4px;}
 .cover-band-main .ce{font-size:34px;font-weight:400;letter-spacing:1px;line-height:1.3;color:rgba(255,255,255,.88);margin-bottom:22px;}
 .cover-band-main .cmeta{font-size:12.5px;letter-spacing:1px;color:rgba(255,255,255,.92);}
@@ -778,6 +778,56 @@ body:not(.scroll-mode) .slide.active {
 /* big display titles → 500 (medium) */
 .cover-band-main .ct,.sec-title,.page-header .page-title,.sn-title,
 .closing-headline,.compare-table .head,.toc-row .te{font-weight:400;}
+
+/* ════════ Design Guide 設計規範頁型 ════════ */
+.dg-body{flex:1;padding:22px var(--slide-px) 40px;overflow:auto;}
+.dg-lead{font-size:13px;color:var(--color-text-light);margin-bottom:18px;line-height:1.7;}
+/* 色彩 */
+.dg-swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.dg-sw{border:1px solid var(--color-border);border-radius:10px;overflow:hidden;background:#fff;}
+.dg-sw .chip{height:88px;}
+.dg-sw .meta{padding:10px 12px;}
+.dg-sw .nm{font-weight:700;font-size:13px;color:var(--color-text);}
+.dg-sw .tk{font-family:monospace;font-size:10.5px;color:var(--color-text-muted);margin-top:2px;}
+.dg-sw .hx{font-family:monospace;font-size:10.5px;color:var(--color-text-light);}
+.dg-sw .use{font-size:11px;color:var(--color-text-light);margin-top:6px;line-height:1.5;}
+/* 字級 */
+.dg-type{display:flex;flex-direction:column;gap:16px;}
+.dg-type-row{display:flex;align-items:baseline;gap:24px;border-bottom:1px solid var(--color-border);padding-bottom:14px;}
+.dg-type-row .sample{flex:1;color:var(--color-text);}
+.dg-type-row .spec{font-family:monospace;font-size:11px;color:var(--color-text-muted);white-space:nowrap;}
+/* 間距 / 圓角 */
+.dg-tokens{display:flex;flex-direction:column;gap:13px;}
+.dg-token{display:flex;align-items:center;gap:16px;}
+.dg-token .tk{width:230px;font-family:monospace;font-size:12px;color:var(--color-text);}
+.dg-token .val{width:56px;font-size:12px;color:var(--color-text-muted);}
+.dg-token .bar{height:16px;background:var(--color-primary);border-radius:3px;}
+.dg-token .rad{height:44px;width:44px;background:var(--color-primary-bg);border:1px solid var(--color-primary);}
+/* 元件 */
+.dg-comp{display:grid;grid-template-columns:1fr 1fr;gap:22px 40px;}
+.dg-comp .grp{display:flex;flex-direction:column;gap:10px;}
+.dg-comp .lbl{font-size:11px;letter-spacing:1px;color:var(--color-text-muted);text-transform:uppercase;font-weight:700;}
+.dg-comp .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.dg-btn{padding:9px 18px;border-radius:8px;border:0;font-size:13px;cursor:pointer;background:var(--color-primary);color:#fff;}
+.dg-btn.ghost{background:transparent;border:1px solid var(--color-primary);color:var(--color-primary);}
+.dg-btn.dis{background:var(--color-border);color:var(--color-text-muted);cursor:not-allowed;}
+.dg-field{padding:9px 12px;border:1px solid var(--color-border);border-radius:8px;font-size:13px;min-width:200px;color:var(--color-text);}
+.dg-field.focus{border-color:var(--color-primary);box-shadow:0 0 0 3px var(--color-primary-bg);}
+.dg-chip{display:inline-block;padding:3px 11px;border-radius:12px;font-size:12px;background:var(--color-primary-bg);color:var(--color-primary);}
+.dg-democard{border:1px solid var(--color-border);border-radius:12px;padding:14px 16px;box-shadow:0 2px 8px rgba(0,0,0,.05);max-width:240px;}
+.dg-democard .t{font-weight:700;font-size:14px;margin-bottom:6px;}
+.dg-democard .d{font-size:12px;color:var(--color-text-light);line-height:1.6;}
+.dg-demotable{border-collapse:collapse;font-size:12.5px;width:100%;}
+.dg-demotable th,.dg-demotable td{border:1px solid var(--color-border);padding:7px 12px;text-align:left;}
+.dg-demotable th{background:var(--color-primary-bg);color:var(--color-text);font-weight:700;}
+/* Do / Don't（綠/紅為固定語意色，非品牌色）*/
+.dg-dodont{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+.dg-dd{border:1px solid var(--color-border);border-radius:12px;overflow:hidden;}
+.dg-dd .hd{padding:10px 14px;font-weight:700;color:#fff;font-size:14px;}
+.dg-dd.do .hd{background:#2E7D5B;}
+.dg-dd.dont .hd{background:#C0392B;}
+.dg-dd .bd{padding:14px 16px;}
+.dg-dd ul{margin:0;padding-left:18px;font-size:12.5px;line-height:1.8;color:var(--color-text);}
 
 </style>
 </head>
@@ -1094,7 +1144,7 @@ body.dnav-open .deck-nav{transform:translateX(0)}
 <!-- COMMENTS:START  ← 客戶版會整段刪除，請勿在此區塊外寫留言相關程式 -->
 <style>
 .ez-toggle{position:fixed;top:16px;right:140px;background:#0B0B0B;color:#fff;border:0;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;z-index:1001;opacity:.92}
-.ez-badge{position:absolute;top:8px;right:8px;background:#D11F2A;color:#fff;font-size:11px;font-weight:700;border-radius:12px;padding:2px 8px;cursor:pointer;z-index:30;display:none}
+.ez-badge{position:absolute;top:8px;right:8px;background:var(--color-primary);color:#fff;font-size:11px;font-weight:700;border-radius:12px;padding:2px 8px;cursor:pointer;z-index:30;display:none}
 body.ez-on .ez-badge{display:inline-block}
 .ez-panel{position:fixed;top:0;right:0;width:320px;height:100vh;background:#fff;box-shadow:-4px 0 24px rgba(0,0,0,.18);z-index:1002;display:none;flex-direction:column;font-size:13px}
 body.ez-open .ez-panel{display:flex}
@@ -1108,18 +1158,18 @@ body.ez-open .ez-panel{display:flex}
 .ez-resolve{font-size:11px;color:#888;cursor:pointer;display:flex;gap:4px;align-items:center}
 .ez-add{display:flex;flex-direction:column;gap:6px;margin-top:8px}
 .ez-add textarea{width:100%;border:1px solid #ddd;border-radius:6px;padding:6px;font-family:inherit;resize:vertical;min-height:38px}
-.ez-add button{align-self:flex-end;background:#D11F2A;color:#fff;border:0;border-radius:6px;padding:6px 14px;cursor:pointer}
+.ez-add button{align-self:flex-end;background:var(--color-primary);color:#fff;border:0;border-radius:6px;padding:6px 14px;cursor:pointer}
 .ez-foot{padding:12px 16px;border-top:1px solid #eee}
 .ez-err{color:#c00;font-size:12px;padding:0 16px 10px}
 .ez-pick{position:fixed;top:16px;right:262px;background:#0B0B0B;color:#fff;border:0;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;z-index:1001;opacity:.92;display:none}
 body.ez-on .ez-pick{display:inline-block}
-body.ez-pick-on .ez-pick{background:#D11F2A}
+body.ez-pick-on .ez-pick{background:var(--color-primary)}
 .ez-hint{position:fixed;top:54px;right:16px;background:#333;color:#fff;font-size:12px;line-height:1.6;padding:10px 12px;border-radius:8px;z-index:1003;max-width:260px;display:none}
 .ez-hint.show{display:block}
 .ez-pinlayer{position:absolute;inset:0;pointer-events:none;z-index:25}
-.ez-pin{position:absolute;transform:translate(-50%,-50%);min-width:22px;height:22px;padding:0 4px;background:#D11F2A;color:#fff;border:2px solid #fff;border-radius:12px;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;pointer-events:auto;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.ez-pin{position:absolute;transform:translate(-50%,-50%);min-width:22px;height:22px;padding:0 4px;background:var(--color-primary);color:#fff;border:2px solid #fff;border-radius:12px;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;pointer-events:auto;box-shadow:0 2px 6px rgba(0,0,0,.3)}
 .ez-pin.lost{background:#999}
-.ez-tag{font-size:10px;color:#D11F2A;font-weight:700;margin-left:6px}
+.ez-tag{font-size:10px;color:var(--color-primary);font-weight:700;margin-left:6px}
 </style>
 
 <button class="ez-toggle" onclick="ezToggle()"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg> 註解模式</button>
@@ -1265,7 +1315,7 @@ function ezBindPick(){
     d.addEventListener('mousemove', function(e){
       if(!ezPick) return;
       if(d.__ezhl && d.__ezhl !== e.target) d.__ezhl.style.outline = '';
-      d.__ezhl = e.target; e.target.style.outline = '2px solid #D11F2A';
+      d.__ezhl = e.target; e.target.style.outline = '2px solid var(--color-primary)';
     }, true);
     d.addEventListener('click', function(e){
       if(!ezPick) return;
@@ -1347,7 +1397,7 @@ function ezBindSlidePick(){
       if(ezDocHl){ ezDocHl.style.outline=''; ezDocHl=null; } return;
     }
     if(ezDocHl && ezDocHl !== t) ezDocHl.style.outline='';
-    ezDocHl = t; t.style.outline = '2px solid #D11F2A';
+    ezDocHl = t; t.style.outline = '2px solid var(--color-primary)';
   }, true);
   document.addEventListener('click', function(e){
     if(!ezPick) return;

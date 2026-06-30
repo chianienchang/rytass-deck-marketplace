@@ -19,7 +19,7 @@
    - 這就是 **endpoint**。把它交給 Claude，會填進簡報設定 `EZC.endpoint`。
 6. 之後若修改 `Code.gs`，要重新「部署 → 管理部署作業 → 編輯 → 版本：新版本 → 部署」才會生效。
 
-> 之後每份新簡報都用**同一個 endpoint**，不必重做這段；不同簡報靠 `EZC.deckId`（各自取一個唯一代號，如 `ezmoney-v1`）區分。
+> 之後每份新簡報都用**同一個 endpoint**，不必重做這段；不同簡報靠 `EZC.deckId`（各自取一個唯一代號，如 `projectA-v1`）區分。
 
 ---
 
@@ -27,7 +27,7 @@
 
 1. 到 **dash.cloudflare.com** 註冊／登入（免費）。
 2. 左側 **Workers & Pages → Create → Pages → Upload assets**。
-3. 取一個專案名稱（如 `ezmoney-review`）。
+3. 取一個專案名稱（如 `projectA-review`）。
 4. 把**整包簡報資料夾**（務必含 `material/`、`design directions/` 與審稿版 HTML）**拖進上傳區**上傳。
 5. 部署完成後會給一個 **`https://xxxx.pages.dev`** 網址。把這個網址分享給同事，他們**點開就能在瀏覽器看簡報、開啟「💬 註解模式」留言**，不用下載。
 6. 簡報內容有更新時，回到該專案 → **Create new deployment** 重新拖拉上傳即可。
