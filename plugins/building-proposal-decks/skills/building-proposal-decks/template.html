@@ -781,7 +781,7 @@ body:not(.scroll-mode) .slide.active {
 </head>
 <body>
 
-<button class="mode-toggle" onclick="togglePresentation()">🖥 簡報模式</button>
+<button class="mode-toggle" onclick="togglePresentation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5l-2 2v1h12v-1l-2-2h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/></svg> 簡報模式</button>
 
 <div class="slides-wrapper">
 
@@ -814,7 +814,9 @@ function togglePresentation() {
   presentationMode = !presentationMode;
   document.body.classList.toggle('scroll-mode', !presentationMode);
   document.querySelector('.nav').style.display = presentationMode ? 'flex' : 'none';
-  document.querySelector('.mode-toggle').textContent = presentationMode ? '📜 一覽模式' : '🖥 簡報模式';
+  document.querySelector('.mode-toggle').innerHTML = presentationMode
+    ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18v6H3V5zm0 8h18v6H3v-6z"/></svg> 一覽模式'
+    : '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5l-2 2v1h12v-1l-2-2h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/></svg> 簡報模式';
   if (presentationMode) updateView();
 }
 
@@ -950,6 +952,127 @@ fitLiveFrames();
 
 </script>
 
+<!-- DECK-NAV:START  側邊導覽列（與留言功能無關，客戶版保留） -->
+<style>
+.dnav-hamburger{position:fixed;top:16px;left:16px;z-index:1101;background:#0B0B0B;color:#fff;border:0;border-radius:8px;padding:8px;cursor:pointer;display:flex;opacity:.92;transition:left .25s ease}
+body.dnav-open .dnav-hamburger{display:none}
+.dnav-menu{background:rgba(255,255,255,.1);border:0;color:#fff;border-radius:6px;padding:5px;cursor:pointer;display:flex}
+.mode-toggle,.ez-toggle,.ez-pick{display:inline-flex;align-items:center;gap:6px}
+.mode-toggle svg,.ez-toggle svg,.ez-pick svg,.ez-close svg{flex:none}
+.deck-nav{position:fixed;top:0;left:0;height:100vh;width:208px;background:#1a1c22;color:#fff;z-index:1100;transform:translateX(-208px);transition:transform .25s ease;display:flex;flex-direction:column;font-size:13px}
+body.dnav-open .deck-nav{transform:translateX(0)}
+.dnav-head{display:flex;align-items:center;gap:8px;padding:14px;border-bottom:1px solid rgba(255,255,255,.12)}
+.dnav-head .t{font-weight:700;flex:1;font-size:12px;letter-spacing:2px;opacity:.7}
+.dnav-viewbtn{background:rgba(255,255,255,.1);border:0;color:#fff;border-radius:6px;padding:5px;cursor:pointer;display:flex}
+.dnav-list{flex:1;overflow:auto;padding:8px}
+.dnav-item{display:flex;gap:8px;align-items:center;padding:7px 8px;border-radius:6px;cursor:pointer;color:rgba(255,255,255,.85);line-height:1.3;margin-bottom:2px}
+.dnav-item:hover{background:rgba(255,255,255,.1)}
+.dnav-item.on{background:var(--color-primary);color:#fff}
+.dnav-item .pn{font-variant-numeric:tabular-nums;opacity:.6;min-width:1.6em;font-size:11px}
+.dnav-item .tt{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.deck-nav.thumbs .dnav-item{flex-direction:column;align-items:stretch;padding:6px}
+.dnav-thumb{width:100%;height:0;padding-bottom:56.25%;position:relative;overflow:hidden;border-radius:4px;background:#fff;margin-bottom:4px;pointer-events:none}
+.dnav-thumb .clip{position:absolute;top:0;left:0;width:1280px;height:720px;transform-origin:top left;margin:0!important}
+</style>
+<button class="dnav-hamburger" title="導覽列" aria-label="導覽列" onclick="dnavToggle()">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>
+</button>
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var ICON_LIST = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h2v2H4V6zm4 0h12v2H8V6zm-4 5h2v2H4v-2zm4 0h12v2H8v-2zm-4 5h2v2H4v-2zm4 0h12v2H8v-2z"/></svg>';
+  var ICON_GRID = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z"/></svg>';
+  var nav = document.createElement('div'); nav.className = 'deck-nav';
+  nav.innerHTML = '<div class="dnav-head"><button class="dnav-menu" title="收合導覽列" onclick="dnavToggle()"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg></button><span class="t">PAGES</span><button class="dnav-viewbtn" title="文字／縮圖切換"></button></div><div class="dnav-list"></div>';
+  document.body.appendChild(nav);
+  var list = nav.querySelector('.dnav-list');
+  var viewBtn = nav.querySelector('.dnav-viewbtn');
+  var thumbs = false;
+
+  function titleOf(s, i){
+    var el = s.querySelector('.page-title, .ph-zh, .chap-zh, .sec-name, .cover-band-main .ct, .toc-band .ttc');
+    var t = el ? el.textContent.trim() : '';
+    return t || ('第 ' + (i+1) + ' 頁');
+  }
+  function markActive(i){
+    list.querySelectorAll('.dnav-item').forEach(function(it, idx){ it.classList.toggle('on', idx === i); });
+  }
+  function jump(i){
+    if (typeof presentationMode !== 'undefined' && presentationMode) { currentSlide = i; updateView(); }
+    else { slides[i].scrollIntoView({ behavior:'smooth', block:'center' }); }
+    markActive(i);
+  }
+  function build(){
+    nav.classList.toggle('thumbs', thumbs);
+    viewBtn.innerHTML = thumbs ? ICON_LIST : ICON_GRID;
+    list.innerHTML = '';
+    slides.forEach(function(s, i){
+      var item = document.createElement('div'); item.className = 'dnav-item';
+      if (thumbs) {
+        var th = document.createElement('div'); th.className = 'dnav-thumb';
+        var clip = s.cloneNode(true);
+        clip.querySelectorAll('.ez-pinlayer, .ez-badge').forEach(function(n){ n.remove(); });
+        clip.classList.add('clip'); clip.classList.remove('active');
+        clip.style.position = 'absolute'; clip.style.opacity = '1'; clip.style.visibility = 'visible';
+        th.appendChild(clip);
+        var cap = document.createElement('div'); cap.className = 'tt'; cap.style.fontSize = '11px';
+        cap.textContent = (i+1) + '. ' + titleOf(s, i);
+        item.appendChild(th); item.appendChild(cap);
+        requestAnimationFrame(function(){ var w = th.clientWidth; if(w) clip.style.transform = 'scale(' + (w/1280) + ')'; });
+      } else {
+        item.innerHTML = '<span class="pn">' + (i+1) + '</span><span class="tt"></span>';
+        item.querySelector('.tt').textContent = titleOf(s, i);
+      }
+      item.onclick = function(){ jump(i); };
+      list.appendChild(item);
+    });
+  }
+  viewBtn.onclick = function(){ thumbs = !thumbs; build(); };
+  build();
+
+  // ── Fit-to-Viewport（側邊欄/留言面板開合、模式切換、視窗縮放時，自動置中縮放）──
+  var wrap = document.querySelector('.slides-wrapper');
+  var SIDEBAR_W = 208, PANEL_W = 320;
+  function sidebarW(){ return document.body.classList.contains('dnav-open') ? SIDEBAR_W : 0; }
+  function panelW(){ return document.body.classList.contains('ez-open') ? PANEL_W : 0; }
+  function fitToViewport(){
+    if(!wrap) return;
+    var left = sidebarW(), right = panelW();
+    var availW = window.innerWidth - left - right;
+    var pm = (typeof presentationMode !== 'undefined' && presentationMode);
+    if(pm){
+      // 簡報模式：縮放置中於可用區（先清一覽模式的設定，避免偏移疊加）
+      wrap.style.zoom = ''; wrap.style.marginLeft = '';
+      var s = Math.min(availW/1280, window.innerHeight/720, 1);
+      wrap.style.position = 'fixed';
+      wrap.style.transformOrigin = 'top left';
+      wrap.style.transform = 'scale(' + s + ')';
+      wrap.style.left = (left + Math.max(0, (availW - 1280*s)/2)) + 'px';
+      wrap.style.top = Math.max(0, (window.innerHeight - 720*s)/2) + 'px';
+    } else {
+      // 一覽模式：清掉簡報模式設定；側邊欄開時 zoom 縮放 + 左邊距（marginLeft 需除以 zoom 補回）
+      wrap.style.position = ''; wrap.style.transform = ''; wrap.style.transformOrigin = ''; wrap.style.left = ''; wrap.style.top = '';
+      if(left){
+        var z = Math.min(1, availW / 1340);
+        wrap.style.zoom = z;
+        wrap.style.marginLeft = (left / z) + 'px';
+      } else { wrap.style.zoom = ''; wrap.style.marginLeft = ''; }
+    }
+    if(typeof ezRenderPins === 'function') ezRenderPins();
+  }
+  window.fitToViewport = fitToViewport;
+  window.dnavToggle = function(){ document.body.classList.toggle('dnav-open'); fitToViewport(); };
+  // 包住既有 togglePresentation：切換模式後重算（涵蓋模式切換的偏移處理）
+  if(typeof window.togglePresentation === 'function'){
+    var _tp = window.togglePresentation;
+    window.togglePresentation = function(){ _tp(); fitToViewport(); };
+  }
+  window.addEventListener('resize', function(){ requestAnimationFrame(fitToViewport); });
+  fitToViewport();
+})();
+</script>
+<!-- DECK-NAV:END -->
+
 <!-- COMMENTS:START  ← 客戶版會整段刪除，請勿在此區塊外寫留言相關程式 -->
 <style>
 .ez-toggle{position:fixed;top:16px;right:140px;background:#0B0B0B;color:#fff;border:0;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;z-index:1001;opacity:.92}
@@ -981,11 +1104,11 @@ body.ez-pick-on .ez-pick{background:#D11F2A}
 .ez-tag{font-size:10px;color:#D11F2A;font-weight:700;margin-left:6px}
 </style>
 
-<button class="ez-toggle" onclick="ezToggle()">💬 註解模式</button>
-<button class="ez-pick" onclick="ezTogglePick()">📌 釘選元件</button>
+<button class="ez-toggle" onclick="ezToggle()"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg> 註解模式</button>
+<button class="ez-pick" onclick="ezTogglePick()"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 9V4h1V2H7v2h1v5l-2 2v2h5.2v7l.8.8.8-.8v-7H18v-2l-2-2z"/></svg> 釘選元件</button>
 <div class="ez-hint">元件圖釘需在審稿網址（Cloudflare）上使用；本機開檔無法釘選。一般留言不受影響。</div>
 <div class="ez-panel">
-  <h3><span id="ezPanelTitle">留言</span><button class="ez-close" onclick="ezClosePanel()">✕</button></h3>
+  <h3><span id="ezPanelTitle">留言</span><button class="ez-close" onclick="ezClosePanel()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></h3>
   <div class="ez-err" id="ezErr" style="display:none">目前無法載入留言</div>
   <div class="ez-list" id="ezList"></div>
   <div class="ez-foot">
@@ -1010,7 +1133,7 @@ function ezAuthor(){
 function ezToggle(){
   ezOn = !ezOn;
   document.body.classList.toggle('ez-on', ezOn);
-  document.querySelector('.ez-toggle').textContent = ezOn ? '💬 關閉註解' : '💬 註解模式';
+  document.querySelector('.ez-toggle').innerHTML = (ezOn ? '關閉註解' : '註解模式').replace(/^/, '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg> ');
   if(ezOn){ ezEnsureBadges(); ezBindPick(); ezFetch(); ezTimer = setInterval(ezFetch, EZC.poll); }
   else {
     clearInterval(ezTimer); ezClosePanel();
@@ -1041,11 +1164,11 @@ function ezMainFor(sid){ return ezData.filter(c=>!c.parentId && c.slideId===sid)
 function ezRenderBadges(){
   document.querySelectorAll('.ez-badge').forEach(b=>{
     const n = ezMainFor(b.dataset.sid).length;
-    b.textContent = '💬 ' + n; b.style.display = ezOn ? 'inline-block' : 'none';
+    b.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg> ' + n; b.style.display = ezOn ? 'inline-block' : 'none';
   });
 }
-function ezOpenPanel(sid){ ezSlide = sid; document.body.classList.add('ez-open'); ezRenderPanel(); }
-function ezClosePanel(){ ezSlide = null; document.body.classList.remove('ez-open'); }
+function ezOpenPanel(sid){ ezSlide = sid; document.body.classList.add('ez-open'); ezRenderPanel(); if(window.fitToViewport) window.fitToViewport(); }
+function ezClosePanel(){ ezSlide = null; document.body.classList.remove('ez-open'); if(window.fitToViewport) window.fitToViewport(); }
 function ezRenderPanel(){
   document.getElementById('ezPanelTitle').textContent = '留言 · ' + ezSlide;
   const list = document.getElementById('ezList'); list.innerHTML = '';
@@ -1053,7 +1176,7 @@ function ezRenderPanel(){
     const replies = ezData.filter(r=>r.parentId===c.id);
     const div = document.createElement('div'); div.className = 'ez-item';
     div.innerHTML =
-      '<div class="who"><span>'+ezEsc(c.author)+(c.anchor?'<span class="ez-tag">📌 在元件上</span>':'')+'</span>'+
+      '<div class="who"><span>'+ezEsc(c.author)+(c.anchor?'<span class="ez-tag"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px"><path d="M16 9V4h1V2H7v2h1v5l-2 2v2h5.2v7l.8.8.8-.8v-7H18v-2l-2-2z"/></svg> 在元件上</span>':'')+'</span>'+
       '<span class="ez-resolve">✓ 已解決</span></div>'+
       '<div class="txt">'+ezEsc(c.text)+'</div>'+
       replies.map(r=>'<div class="ez-reply"><b>'+ezEsc(r.author)+'：</b>'+ezEsc(r.text)+'</div>').join('')+
@@ -1114,7 +1237,7 @@ function ezTogglePick(){
   if(!ezPick && !accessible){ hint.classList.add('show'); setTimeout(function(){ hint.classList.remove('show'); }, 4000); return; }
   ezPick = !ezPick;
   document.body.classList.toggle('ez-pick-on', ezPick);
-  document.querySelector('.ez-pick').textContent = ezPick ? '📌 釘選中…點元件' : '📌 釘選元件';
+  document.querySelector('.ez-pick').innerHTML = (ezPick ? '釘選中…點元件' : '釘選元件').replace(/^/, '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 9V4h1V2H7v2h1v5l-2 2v2h5.2v7l.8.8.8-.8v-7H18v-2l-2-2z"/></svg> ');
   ezShowcases().forEach(function(s){ var d = ezSameDoc(s.f); if(d) d.body.style.cursor = ezPick ? 'crosshair' : ''; });
 }
 function ezBindPick(){
