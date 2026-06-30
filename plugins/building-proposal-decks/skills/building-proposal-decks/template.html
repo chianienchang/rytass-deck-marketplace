@@ -700,8 +700,10 @@ body:not(.scroll-mode) .slide.active {
 .compare-table > div{border-right:none;}
 /* compare head = home screenshot in device frame (merged recap) */
 .compare-table .cmp-shot{flex-direction:column;align-items:center;gap:9px;padding:12px;background:#fff;}
-.cmp-shot .device{width:100%;border-width:7px;border-radius:12px;box-shadow:none;}
-.cmp-shot .device img{width:100%;display:block;}
+.cmp-shot .device{width:100%;aspect-ratio:1440/900;border-width:7px;border-radius:12px;box-shadow:none;overflow:auto;scrollbar-width:thin;}
+.cmp-shot .device::-webkit-scrollbar{width:6px}
+.cmp-shot .device::-webkit-scrollbar-thumb{background:rgba(0,0,0,.2);border-radius:3px}
+.cmp-shot .device img{width:100%;height:auto;display:block;}
 .cmp-shot .cmp-name{font-size:18px;color:var(--color-text);letter-spacing:.5px;}
 /* closing: numbered blocks — no card bg, big numbers, thin dividers */
 .closing-body{padding-top:72px;justify-content:flex-start;gap:26px;}
@@ -1069,6 +1071,22 @@ body.dnav-open .deck-nav{transform:translateX(0)}
   }
   window.addEventListener('resize', function(){ requestAnimationFrame(fitToViewport); });
   fitToViewport();
+
+  // ── 比較頁：三個整頁截圖框「比例同步捲動」（捲一個，三個一起、同時到底）──
+  document.querySelectorAll('.compare-table').forEach(function(tbl){
+    var grp = Array.prototype.slice.call(tbl.querySelectorAll('.cmp-shot .device'));
+    if(grp.length < 2) return;
+    var syncing = false;
+    grp.forEach(function(el){
+      el.addEventListener('scroll', function(){
+        if(syncing) return; syncing = true;
+        var denom = el.scrollHeight - el.clientHeight;
+        var ratio = denom > 0 ? el.scrollTop / denom : 0;
+        grp.forEach(function(o){ if(o !== el){ var d = o.scrollHeight - o.clientHeight; o.scrollTop = ratio * d; } });
+        requestAnimationFrame(function(){ syncing = false; });
+      });
+    });
+  });
 })();
 </script>
 <!-- DECK-NAV:END -->
