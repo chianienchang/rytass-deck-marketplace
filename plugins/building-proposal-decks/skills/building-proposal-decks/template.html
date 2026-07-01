@@ -769,7 +769,7 @@ body:not(.scroll-mode) .slide.active {
 .ph-top .ph-zh{font-size:12px;letter-spacing:1.5px;color:var(--color-text-muted);font-weight:400;}
 .ph-top .page-num{margin-left:auto;font-size:12px;color:var(--color-text-muted);}
 .page-num,.toc-num,.chap-num,.dirs-num,.sec-num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum";letter-spacing:1px;}
-.page-header .page-title{display:block;font-size:25px;font-weight:400;color:var(--color-text);letter-spacing:.5px;line-height:1.25;padding:24px 0 0 44px;}
+.page-header .page-title{display:block;font-size:25px;font-weight:400;color:var(--color-text);letter-spacing:.5px;line-height:1.25;padding:24px 0 0 36px;}
 /* footer running label removed (too small; page number is in the header) */
 .slide-footer{display:none;}
 
@@ -782,13 +782,13 @@ body:not(.scroll-mode) .slide.active {
 .closing-headline,.compare-table .head,.toc-row .te{font-weight:400;}
 
 /* ════════ Design Guide 設計規範頁型 ════════ */
-.dg-body{flex:1;padding:22px var(--slide-px) 40px;overflow:auto;}
+.dg-body{flex:1;padding:22px var(--slide-px) 40px;overflow:hidden;}
 .dg-lead{font-size:13px;color:var(--color-text-light);margin-bottom:18px;line-height:1.7;}
 /* 色彩 */
-.dg-swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.dg-swatches{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
 .dg-sw{border:1px solid var(--color-border);border-radius:10px;overflow:hidden;background:#fff;}
-.dg-sw .chip{height:88px;}
-.dg-sw .meta{padding:10px 12px;}
+.dg-sw .chip{height:64px;}
+.dg-sw .meta{padding:8px 10px;}
 .dg-sw .nm{font-weight:700;font-size:13px;color:var(--color-text);}
 .dg-sw .tk{font-family:monospace;font-size:10.5px;color:var(--color-text-muted);margin-top:2px;}
 .dg-sw .hx{font-family:monospace;font-size:10.5px;color:var(--color-text-light);}
@@ -815,21 +815,25 @@ body:not(.scroll-mode) .slide.active {
 .dg-btn.dis{background:var(--color-border);color:var(--color-text-muted);cursor:not-allowed;}
 .dg-field{padding:9px 12px;border:1px solid var(--color-border);border-radius:8px;font-size:13px;min-width:200px;color:var(--color-text);}
 .dg-field.focus{border-color:var(--color-primary);box-shadow:0 0 0 3px var(--color-primary-bg);}
-.dg-chip{display:inline-block;padding:3px 11px;border-radius:12px;font-size:12px;background:var(--color-primary-bg);color:var(--color-primary);}
-.dg-democard{border:1px solid var(--color-border);border-radius:12px;padding:14px 16px;box-shadow:0 2px 8px rgba(0,0,0,.05);max-width:240px;}
+.dg-chip{display:inline-block;padding:3px 11px;border-radius:999px;font-size:12px;background:transparent;border:1px solid #c8ccd2;color:var(--color-text);}
+.dg-democard{border-radius:12px;padding:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);max-width:260px;background:#fff;}
 .dg-democard .t{font-weight:700;font-size:14px;margin-bottom:6px;}
 .dg-democard .d{font-size:12px;color:var(--color-text-light);line-height:1.6;}
 .dg-demotable{border-collapse:collapse;font-size:12.5px;width:100%;}
 .dg-demotable th,.dg-demotable td{border:1px solid var(--color-border);padding:7px 12px;text-align:left;}
-.dg-demotable th{background:var(--color-primary-bg);color:var(--color-text);font-weight:700;}
+.dg-demotable th{background:var(--color-bg-alt);color:var(--color-text);font-weight:700;
+/* Imagery 影像頁 */
+.dg-imgs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;}
+.dg-img .ph{width:100%;aspect-ratio:16/10;border-radius:12px;overflow:hidden;background:var(--color-bg-alt);}
+.dg-img .ph img{width:100%;height:100%;object-fit:cover;display:block;}
+.dg-img .cap{font-size:12px;color:var(--color-text-light);margin-top:8px;line-height:1.55;}
+.dg-img .cap b{color:var(--color-text);font-weight:700;}}
 /* Do / Don't（綠/紅為固定語意色，非品牌色）*/
-.dg-dodont{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
-.dg-dd{border:1px solid var(--color-border);border-radius:12px;overflow:hidden;}
-.dg-dd .hd{padding:10px 14px;font-weight:700;color:#fff;font-size:14px;}
-.dg-dd.do .hd{background:#2E7D5B;}
-.dg-dd.dont .hd{background:#C0392B;}
-.dg-dd .bd{padding:14px 16px;}
-.dg-dd ul{margin:0;padding-left:18px;font-size:12.5px;line-height:1.8;color:var(--color-text);}
+.dg-dodont{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding-top:8px;}
+.dg-dd .hd{font-size:60px;font-weight:700;letter-spacing:1px;margin-bottom:16px;line-height:1;}
+.dg-dd.do .hd{color:var(--color-primary);}
+.dg-dd.dont .hd{color:#C0392B;}
+.dg-dd ul{margin:0;padding-left:18px;font-size:14px;line-height:1.95;color:var(--color-text);}
 
 </style>
 </head>
