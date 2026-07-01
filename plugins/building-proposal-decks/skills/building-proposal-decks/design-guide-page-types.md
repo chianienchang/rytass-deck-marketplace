@@ -43,6 +43,10 @@
         <div class="meta"><div class="nm">邊框</div><div class="tk">--color-border</div><div class="hx">#E3E5EA</div><div class="use">分隔線、外框（固定）</div></div></div>
       <div class="dg-sw"><div class="chip" style="background:var(--color-dark-bg)"></div>
         <div class="meta"><div class="nm">深色底</div><div class="tk">--color-dark-bg</div><div class="hx">#15171D</div><div class="use">深色區塊（固定）</div></div></div>
+      <div class="dg-sw"><div class="chip" style="background:var(--color-bg-alt)"></div>
+        <div class="meta"><div class="nm">區塊底灰</div><div class="tk">--color-bg-alt</div><div class="hx">#F3F4F6</div><div class="use">內容區塊底、灰帶（固定）</div></div></div>
+      <div class="dg-sw"><div class="chip" style="background:var(--color-bg-alt-2)"></div>
+        <div class="meta"><div class="nm">章節頁底</div><div class="tk">--color-bg-alt-2</div><div class="hx">#E8EAEE</div><div class="use">章節／風格分頁背景（固定）</div></div></div>
     </div>
   </div>
 </div>
@@ -58,11 +62,11 @@
     <span class="page-tag">TYPOGRAPHY</span><span class="ph-zh">字級</span><span class="page-num">03 / 06</span>
   </div><div class="page-title">字級階層</div></div>
   <div class="dg-body"><div class="dg-type">
-    <div class="dg-type-row"><span class="sample" style="font-size:40px;font-weight:700">大標題 Display</span><span class="spec">40px / 700 / 1.2</span></div>
-    <div class="dg-type-row"><span class="sample" style="font-size:28px;font-weight:700">頁標題 Title</span><span class="spec">28px / 700 / 1.3</span></div>
-    <div class="dg-type-row"><span class="sample" style="font-size:20px;font-weight:600">小標 Subtitle</span><span class="spec">20px / 600 / 1.4</span></div>
+    <div class="dg-type-row"><span class="sample" style="font-size:88px;font-weight:400;letter-spacing:1px">Aa 特大展示</span><span class="spec">88–92px / 400 · 章節、風格分頁（Style A）</span></div>
+    <div class="dg-type-row"><span class="sample" style="font-size:34px;font-weight:400">封面主標</span><span class="spec">34px / 400 · 封面</span></div>
+    <div class="dg-type-row"><span class="sample" style="font-size:25px;font-weight:400">頁標題 Page Title</span><span class="spec">25px / 400 · 各內容頁</span></div>
     <div class="dg-type-row"><span class="sample" style="font-size:15px">內文 Body：一般段落文字使用此級。</span><span class="spec">15px / 400 / 1.7</span></div>
-    <div class="dg-type-row"><span class="sample" style="font-size:12px;color:var(--color-text-muted)">輔助 Caption：註解、標籤</span><span class="spec">12px / 400 / 1.5</span></div>
+    <div class="dg-type-row"><span class="sample" style="font-size:12px;color:var(--color-text-muted)">輔助 Caption：註解、小標、標籤</span><span class="spec">12px / 400</span></div>
   </div></div>
 </div>
 ```
